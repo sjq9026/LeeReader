@@ -19,23 +19,33 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-
-export default class App extends Component<Props> {
+export default class WelcomePage extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
       </View>
     );
   }
+
+
+
+
+    componentDidMount(){
+        var that = this;
+        this.timer = setInterval(function () {
+            that.jumpAPPage();
+        },3000)
+    }
+
+    jumpAPPage(){
+        this.props.navigation.navigate('MainPage');
+        clearInterval(this.timer);
+    }
+
+
 }
 
 const styles = StyleSheet.create({
