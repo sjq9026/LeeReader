@@ -47,8 +47,12 @@ export default class HttpUtil {
             fetch(url)
                 .then(response => response.json())
                 .then((result) => {
-                    console.log(JSON.stringify(result));
-                    resolve(result);
+                    if (result.showapi_res_code === 0) {
+                        resolve(result.showapi_res_body.pagebean.contentlist);
+                    }else{
+                        reject("获取网络数据失败");
+                    }
+
                 })
                 .catch((error) => {
                     reject(error);
