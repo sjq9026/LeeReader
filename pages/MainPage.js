@@ -65,8 +65,9 @@ export default class MainPage extends Component<Props> {
                 <Text style={{paddingLeft: 10, fontSize: 18, color: "#EA2000"}}>LeeReader</Text>
             </View>
 
-
+            <View style={{height:55}}>
             <ScrollableTabView
+                style={{borderWidth:1,borderColor:"red"}}
                 initialPage={0}
                 renderTabBar={() => <ScrollableTabBar/>}
                 tabBarUnderlineColor='#FF0000'
@@ -84,10 +85,11 @@ export default class MainPage extends Component<Props> {
                      </Text> : null;*/
 
                     return <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
+
                     </Text>;
                 })}
             </ScrollableTabView>
-
+            </View>
             <FlatList
                 data={this.state.list}
                 renderItem={(data) => this._renderItem(data)}
