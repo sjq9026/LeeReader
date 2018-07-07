@@ -38,7 +38,7 @@ export default class MainPage extends Component<Props> {
         this.dataUtil = new DataUtil(KEYS.NEW_CATEGORY);
         this.state = {
             categories: [],
-            newslist: [],
+            newsList: [],
             isRefreshing: false
         }
         ;
@@ -65,33 +65,32 @@ export default class MainPage extends Component<Props> {
                 <Text style={{paddingLeft: 10, fontSize: 18, color: "#EA2000"}}>LeeReader</Text>
             </View>
 
-            <View style={{height:55}}>
-            <ScrollableTabView
-                style={{borderWidth:1,borderColor:"red"}}
-                initialPage={0}
-                renderTabBar={() => <ScrollableTabBar/>}
-                tabBarUnderlineColor='#FF0000'
-                tabBarBackgroundColor='#FFFFFF'
-                tabBarActiveTextColor='#9B30FF'
-                tabBarInactiveTextColor='#7A67EE'
-                onChangeTab={(obj) => {
+            <View style={{height: 35}}>
+                <ScrollableTabView
+                    style={{borderWidth: 1, borderColor: "red"}}
+                    initialPage={0}
+                    renderTabBar={() => <ScrollableTabBar/>}
+                    tabBarUnderlineColor='#FF0000'
+                    tabBarBackgroundColor='#FFFFFF'
+                    tabBarActiveTextColor='#9B30FF'
+                    tabBarInactiveTextColor='#7A67EE'
+                    onChangeTab={(obj) => {
+                        this.onTabChange(obj.i);
+                    }}
+                    tabBarTextStyle={{fontSize: 14}}>
+                    {this.state.categories.map((result, i, array) => {
+                        let tab = array[i];
+                        /*  return tab.isCheck ? <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
+                         </Text> : null;*/
 
-                    this.onTabChange(obj.i);
-                }}
-                tabBarTextStyle={{fontSize: 14}}>
-                {this.state.categories.map((result, i, array) => {
-                    let tab = array[i];
-                    /*  return tab.isCheck ? <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
-                     </Text> : null;*/
+                        return <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
 
-                    return <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
-
-                    </Text>;
-                })}
-            </ScrollableTabView>
+                        </Text>;
+                    })}
+                </ScrollableTabView>
             </View>
             <FlatList
-                data={this.state.list}
+                data={this.state.newsList}
                 renderItem={(data) => this._renderItem(data)}
                 /*  refreshing={this.state.isLoading}
                   onRefresh={this._onRefresh}*/
@@ -118,7 +117,6 @@ export default class MainPage extends Component<Props> {
     loadData() {
         this.dataUtil.getNewsCategory()
             .then(result => {
-                console.log(result);
                 let datas = [];
                 for (let i = 0; i < result.length; i++) {
                     let category = result[i];
@@ -135,25 +133,25 @@ export default class MainPage extends Component<Props> {
     }
 
     _renderItem(data) {
-        console.log("item======>"+data)
-        return <NewsListCell data={data}/>
+        console.log("item--->"+data.title);
+
+         return <NewsListCell key={data.item.id} data={data.item}/>
+
+
     }
 
     onTabChange(index) {
         this.category = this.state.categories[index];
-
         this.refreshNewsData();
-
-
     }
 
 
     refreshNewsData() {
         this.httpUtil.getNewsList(this.httpUtil.getUrl(this.category.channelId, this.category.name, "", "", "", "", "", ""))
             .then((result) => {
-                console.log(result)
+
                 this.setState({
-                    newslist: result,
+                    newsList: result,
                     isRefreshing: false
                 })
             })
@@ -166,10 +164,7 @@ export default class MainPage extends Component<Props> {
                 size={"large"}
                 color={"red"}
                 animating={true}
-
-
             />
-
             <Text>正在加载更多</Text>
 
 
@@ -205,5 +200,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#333333',
         marginBottom: 5,
+    },
+    item: {
+        backgroundColor: "green",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 100,
+        marginBottom: 10,
+        width: ScreenWidth - 20,
+        marginLeft: 10,
+        marginRight: 10
     },
 });

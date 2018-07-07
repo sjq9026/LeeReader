@@ -26,11 +26,22 @@ export default class NewsListCell extends Component<Props> {
     }
 
     render() {
+        let {data} = this.props;
+        let item = null;
+        if (data.pics.length > 0) {
+            item = <View style={styles.}>
+
+            </View>
+        }else{
+            item = <View>
+
+            </View>
+        }
+
+
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    {this.props.data.title}
-                </Text>
+                {item}
             </View>
         );
     }
@@ -55,4 +66,7 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
+    strlayout:{
+
+    }
 });
