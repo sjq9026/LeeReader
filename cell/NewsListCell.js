@@ -9,7 +9,8 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Image
 } from 'react-native';
 
 const instructions = Platform.select({
@@ -26,18 +27,45 @@ export default class NewsListCell extends Component<Props> {
     }
 
     render() {
-        let {data} = this.props;
+       let {data} = this.props;
         let item = null;
-        if (data.pics.length > 0) {
-            item = <View style={styles.}>
-
+        if (data.imageurls.length === 0) {
+            item = <View style={styles.strlayout}>
+                <View style={styles.strlayout}>
+                    <Text style={{height: 40, lineHeight: 40, textAlign: "center"}}>{data.title}</Text>
+                    <Text>来源：{data.source}</Text>
+                </View>
             </View>
-        }else{
-            item = <View>
+        } else if (data.imageurls.length < 3) {
+            item = <View style={styles.imglayout}>
+                <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[0].url}}>
+
+                </Image>
+                <View style={styles.strlayout}>
+                    <Text style={{height: 40, lineHeight: 40, textAlign: "center"}}>{data.title}</Text>
+                    <Text>来源：{data.source}</Text>
+                </View>
+            </View>
+        } else {
+            item = <View style={styles.moreimglayout}>
+                <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[0].url}}>
+
+                    </Image>
+                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[1].url}}>
+
+                    </Image>
+                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[2].url}}>
+
+                    </Image>
+                </View>
+                <View style={styles.strlayout}>
+                    <Text style={{height: 40, lineHeight: 40, textAlign: "center"}}>{data.title}</Text>
+                    <Text>来源：{data.source}</Text>
+                </View>
 
             </View>
         }
-
 
         return (
             <View style={styles.container}>
@@ -66,7 +94,21 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
-    strlayout:{
+    strlayout: {
+        flexDirection: "column",
+        height: 80
 
+
+    },
+    imglayout: {
+        flexDirection: "row",
+        height: 80
+
+
+    },
+    moreimglayout: {
+        flexDirection: "column",
+        height: 80
     }
+
 });

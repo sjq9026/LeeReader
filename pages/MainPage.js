@@ -53,19 +53,22 @@ export default class MainPage extends Component<Props> {
 
 
     render() {
-        return <View style={styles.container}>
-            <View style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                height: 50,
-                width: ScreenWidth,
-                backgroundColor: "#F5FCFF"
-            }}>
-                <Text style={{paddingLeft: 10, fontSize: 18, color: "#EA2000"}}>LeeReader</Text>
-            </View>
+        let tabviews = null;
+        let scrollTab = null;
+        if (this.state.categories.length > 0) {
 
-            <View style={{height: 35}}>
+
+            tabviews = this.state.categories.map((result, i, array) => {
+                let tab = array[i];
+                /*  return tab.isCheck ? <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
+                 </Text> : null;*/
+
+                return <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
+
+                </Text>;
+            })
+
+            scrollTab = <View style={{height: 35}}>
                 <ScrollableTabView
                     style={{borderWidth: 1, borderColor: "red"}}
                     initialPage={0}
@@ -78,17 +81,26 @@ export default class MainPage extends Component<Props> {
                         this.onTabChange(obj.i);
                     }}
                     tabBarTextStyle={{fontSize: 14}}>
-                    {this.state.categories.map((result, i, array) => {
-                        let tab = array[i];
-                        /*  return tab.isCheck ? <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
-                         </Text> : null;*/
+                    {tabviews}
 
-                        return <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
-
-                        </Text>;
-                    })}
                 </ScrollableTabView>
             </View>
+        }
+
+
+        return <View style={styles.container}>
+            <View style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                height: 50,
+                width: ScreenWidth,
+                backgroundColor: "#F5FCFF"
+            }}>
+                <Text style={{paddingLeft: 10, fontSize: 18, color: "#EA2000"}}>LeeReader</Text>
+            </View>
+            {scrollTab}
+
             <FlatList
                 data={this.state.newsList}
                 renderItem={(data) => this._renderItem(data)}
@@ -133,9 +145,9 @@ export default class MainPage extends Component<Props> {
     }
 
     _renderItem(data) {
-        console.log("item--->"+data.title);
+        console.log("item--->" + data.title);
 
-         return <NewsListCell key={data.item.id} data={data.item}/>
+        return <NewsListCell key={data.item.id} data={data.item}/>
 
 
     }

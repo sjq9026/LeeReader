@@ -42,10 +42,12 @@ export default class HttpUtil {
      * @returns {Promise}
      */
     getNewsList(url) {
+
+        let testUrl = "http://www.wanandroid.com/tools/mockapi/7132/leereader";
         console.log("getNewsListURL-------->" + url);
         return new Promise((resolve, reject) => {
             fetch(url)
-                .then(response => response.json())
+                .then((response) => response.json())
                 .then((result) => {
                     if (result.showapi_res_code === 0) {
                         resolve(result.showapi_res_body.pagebean.contentlist);
