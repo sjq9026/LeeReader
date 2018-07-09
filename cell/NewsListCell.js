@@ -10,7 +10,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 
 const instructions = Platform.select({
@@ -19,7 +20,7 @@ const instructions = Platform.select({
     android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-
+const  ScreenWidth = Dimensions.get("window").width;
 export default class NewsListCell extends Component<Props> {
 
     constructor(props) {
@@ -27,18 +28,18 @@ export default class NewsListCell extends Component<Props> {
     }
 
     render() {
-       let {data} = this.props;
+        let {data} = this.props;
         let item = null;
         if (data.imageurls.length === 0) {
             item = <View style={styles.strlayout}>
                 <View style={styles.strlayout}>
-                    <Text style={{height: 40, lineHeight: 40, textAlign: "center"}}>{data.title}</Text>
-                    <Text>来源：{data.source}</Text>
+                    <Text style={styles.title}>{data.title}</Text>
+                    <Text style={styles.laiyuan}>来源：{data.source}</Text>
                 </View>
             </View>
         } else if (data.imageurls.length < 3) {
             item = <View style={styles.imglayout}>
-                <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[0].url}}>
+                <Image style={{height: 60, width:60}} source={{uri: data.imageurls[0].url}}>
 
                 </Image>
                 <View style={styles.strlayout}>
@@ -49,13 +50,13 @@ export default class NewsListCell extends Component<Props> {
         } else {
             item = <View style={styles.moreimglayout}>
                 <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[0].url}}>
+                    <Image style={{height: 60, width: (ScreenWidth-50)/3,marginRight:5}} source={{uri: data.imageurls[0].url}}>
 
                     </Image>
-                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[1].url}}>
+                    <Image style={{height: 60, width: (ScreenWidth-50)/3,marginLeft:5,marginRight:5}} source={{uri: data.imageurls[1].url}}>
 
                     </Image>
-                    <Image style={{height: 60, width: 60}} source={{uri: data.imageurls[2].url}}>
+                    <Image style={{height: 60, width: (ScreenWidth-50)/3,marginLeft:5}} source={{uri: data.imageurls[2].url}}>
 
                     </Image>
                 </View>
@@ -108,7 +109,18 @@ const styles = StyleSheet.create({
     },
     moreimglayout: {
         flexDirection: "column",
-        height: 80
+        height: 120
+    },
+    title: {
+        fontSize: 16,
+        height: 40,
+        lineHeight: 40,
+        textAlign: "center",
+        color: "#525353"
+    },
+    laiyuan: {
+        color: "#B9B9B9",
+        fontSize: 14
     }
 
 });
