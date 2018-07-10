@@ -13,7 +13,7 @@ export default class DataUtil {
             AsyncStorage.getItem(this.key, (error, result) => {
                 //如果没有获取到分类数据，就把本地的再存一份
                 if (result === null || result.length === 0) {
-                    this.saveNewsCategory();
+                    this.saveNewsCategory(categories);
                     resolve(categories);
                 }
 
@@ -28,9 +28,9 @@ export default class DataUtil {
     /**
      * 保存新闻分类数据
      */
-    saveNewsCategory() {
+    saveNewsCategory(data) {
         new Promise((resolve, reject) => {
-            AsyncStorage.setItem(this.key, JSON.stringify(categories), (error) => {
+            AsyncStorage.setItem(this.key, JSON.stringify(data), (error) => {
                 ToastAndroid.show("分类是数据初始化成功,1000");
             })
         })

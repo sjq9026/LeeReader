@@ -4,6 +4,7 @@ import {StackNavigator, DrawerNavigator, TabNavigator} from 'react-navigation'
 
 import WelcomePage from "./pages/WelcomePage";
 import MainPage from "./pages/MainPage";
+import AllColumnPage from "./pages/AllColumnPage";
 
 
 const pages = StackNavigator(
@@ -22,4 +23,4 @@ const pages = StackNavigator(
         }
     })
 
-AppRegistry.registerComponent('LeeReader', () => pages);
+AppRegistry.registerComponent('LeeReader', () => AllColumnPage);
