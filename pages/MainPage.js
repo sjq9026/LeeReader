@@ -112,6 +112,7 @@ export default class MainPage extends Component<Props> {
                 }
 
                 ListFooterComponent={() => this._renderFooterView()}
+                ListEmptyComponent={() => this._emptyComponent()}
                 onEndReached={() => this._loadMore()}
             />
 
@@ -152,6 +153,12 @@ export default class MainPage extends Component<Props> {
                              onNewItemSelect={() => this.onNewItemClick(data.item)}/>
 
 
+    }
+
+    _emptyComponent() {
+        return <View style={{flex: 1, justifyContent: "center"}}>
+            <Text style={{alignItems: "center"}}>阿嘞！我也不知道发生了什么。。。</Text>
+        </View>
     }
 
     /**
@@ -246,6 +253,9 @@ const styles = StyleSheet.create({
     },
     footerLayout: {
         flexDirection: "column",
+        width:ScreenWidth,
+        justifyContent:"center",
+        alignItems:"center"
 
     }
 });
