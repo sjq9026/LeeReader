@@ -204,6 +204,7 @@ export default class MainPage extends Component<Props> {
                 size={"large"}
                 color={"red"}
                 animating={true}
+
             />
             <Text style={{alignItems: "center"}}>正在加载更多</Text>
 
