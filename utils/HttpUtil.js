@@ -46,7 +46,7 @@ export default class HttpUtil {
         let testUrl = "http://www.wanandroid.com/tools/mockapi/7132/leereader";
         console.log("getNewsListURL-------->" + url);
         return new Promise((resolve, reject) => {
-            fetch(url)
+            fetch(testUrl)
                 .then((response) => response.json())
                 .then((result) => {
                     if (result.showapi_res_code === 0) {
