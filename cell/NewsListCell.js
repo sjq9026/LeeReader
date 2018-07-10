@@ -11,20 +11,16 @@ import {
     Text,
     View,
     Image,
-    Dimensions
+    Dimensions,
+    TouchableHighlight
 } from 'react-native';
 
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+
 const ScreenWidth = Dimensions.get("window").width;
 export default class NewsListCell extends Component<Props> {
 
     constructor(props) {
-        super();
+        super(props);
     }
 
     render() {
@@ -64,8 +60,10 @@ export default class NewsListCell extends Component<Props> {
                 </View>
                 <View style={styles.strlayout}>
                     <Text style={styles.title}>{data.title}</Text>
-                    <Text style={{ color: "#B9B9B9",
-                        fontSize: 14,marginTop:0}}>来源：{data.source}</Text>
+                    <Text style={{
+                        color: "#B9B9B9",
+                        fontSize: 14, marginTop: 0
+                    }}>来源：{data.source}</Text>
                 </View>
 
 
@@ -74,7 +72,12 @@ export default class NewsListCell extends Component<Props> {
 
         return (
             <View style={styles.container}>
-                {item}
+                <TouchableHighlight onPress={this.props.onNewItemSelect}>
+
+                    {item}
+
+                </TouchableHighlight>
+
 
                 <View>
                     <Text style={{
@@ -91,6 +94,7 @@ export default class NewsListCell extends Component<Props> {
             </View>
         );
     }
+
 
 
 }
@@ -117,7 +121,6 @@ const styles = StyleSheet.create({
     },
     strlayout: {
         flexDirection: "column",
-
 
 
     },
