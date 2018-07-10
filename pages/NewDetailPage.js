@@ -9,19 +9,30 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Dimensions,
+    TouchableHighlight,
+    Image,
+    WebView
 } from 'react-native';
 
 
-
+const width = Dimensions.get("window").width;
 export default class NewDetailPage extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            url: url,
+            url: "",
             title: "",
             canGoBack: false,
         };
+    }
+
+
+    componentWillMount() {
+        this.setState({
+            url: this.props.navigation.state.params.data.link
+        })
     }
 
     render() {
@@ -42,12 +53,12 @@ export default class NewDetailPage extends Component<Props> {
                                    style={{height: 20, width: 20}}>
                             </Image>
                         </TouchableHighlight>
-                        <TouchableHighlight style={{width: 20, height: 20, marginRight: 15, marginLeft: 15}}
+                      {/*  <TouchableHighlight style={{width: 20, height: 20, marginRight: 15, marginLeft: 15}}
                                             onPress={this.favoriteClick}>
                             <Image source={img}
                                    style={{height: 20, width: 20}}>
                             </Image>
-                        </TouchableHighlight>
+                        </TouchableHighlight>*/}
                     </View>
 
 
@@ -65,18 +76,20 @@ export default class NewDetailPage extends Component<Props> {
         );
     }
 
-
-    componentDidMount() {
-        let that = this;
-        this.timer = setInterval(function () {
-            that.jumpAPPage();
-        }, 3000)
+    onWebViewStateChange(e) {
+        this.setState({
+            canGoBack: e.canGoBack,
+        })
+    }
+    leftBtnClick() {
+        if (this.state.canGoBack) {
+            this.refs.webview.goBack();
+        } else {
+            this.props.navigation.goBack();
+        }
     }
 
-    jumpAPPage() {
-        this.props.navigation.navigate('MainPage');
-        clearInterval(this.timer);
-    }
+
 
 
 }

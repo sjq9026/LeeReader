@@ -5,7 +5,7 @@
  */
 
 import React, {Component} from 'react';
-import ScrollableTabView, { ScrollableTabBar} from 'react-native-scrollable-tab-view';
+import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
 import {
     Platform,
     StyleSheet,
@@ -22,22 +22,21 @@ import DataUtil, {KEYS} from "../utils/DataUtil";
 import NewsListCell from "../cell/NewsListCell";
 
 
-
-
-
 const ScreenWidth = Dimensions.get("window").width;
+
 export default class MainPage extends Component<Props> {
 
     constructor(props) {
         super(props);
         this.httpUtil = new HttpUtil();
         this.dataUtil = new DataUtil(KEYS.NEW_CATEGORY);
+        this.category = null;
+        this.curreentPage = 1;
         this.state = {
             categories: [],
             newsList: [],
             isRefreshing: false
-        }
-        ;
+        };
 
 
         this.loadData = this.loadData.bind(this);
@@ -52,8 +51,6 @@ export default class MainPage extends Component<Props> {
         let tabviews = null;
         let scrollTab = null;
         if (this.state.categories.length > 0) {
-
-
             tabviews = this.state.categories.map((result, i, array) => {
                 let tab = array[i];
                 /*  return tab.isCheck ? <Text style={{textAlign: 'center'}} key={i} tabLabel={tab.name}>
@@ -66,7 +63,6 @@ export default class MainPage extends Component<Props> {
 
             scrollTab = <View style={{height: 35}}>
                 <ScrollableTabView
-                    style={{borderWidth: 1, borderColor: "red"}}
                     initialPage={0}
                     renderTabBar={() => <ScrollableTabBar/>}
                     tabBarUnderlineColor='#FF0000'
@@ -78,14 +74,12 @@ export default class MainPage extends Component<Props> {
                     }}
                     tabBarTextStyle={{fontSize: 14}}>
                     {tabviews}
-
                 </ScrollableTabView>
             </View>
         }
 
 
         return <View style={styles.container}>
-
 
 
             <View style={{
@@ -101,6 +95,7 @@ export default class MainPage extends Component<Props> {
             {scrollTab}
 
             <FlatList
+                ref="_flatList"
                 data={this.state.newsList}
                 renderItem={(data) => this._renderItem(data)}
                 /*  refreshing={this.state.isLoading}
@@ -117,7 +112,7 @@ export default class MainPage extends Component<Props> {
                 }
 
                 ListFooterComponent={() => this._renderFooterView()}
-                onEndReached={() => this._onRefresh(false)}
+                onEndReached={() => this._loadMore()}
             />
 
         </View>
@@ -140,13 +135,21 @@ export default class MainPage extends Component<Props> {
                 this.setState({
                     categories: datas
                 })
+
+                if (this.category === null) {
+                    this.category = this.state.categories[0];
+                }
+                this.refreshNewsData();
+
+
             });
+
+
     }
 
     _renderItem(data) {
-        console.log("item--->" + data.title);
-
-        return <NewsListCell key={data.item.id} data={data.item} onNewItemSelect={()=>this.onNewItemClick(data.item)}/>
+        return <NewsListCell key={data.item.id} data={data.item}
+                             onNewItemSelect={() => this.onNewItemClick(data.item)}/>
 
 
     }
@@ -154,8 +157,8 @@ export default class MainPage extends Component<Props> {
     /**
      * 跳转到新闻详情页面
      */
-    onNewItemClick(item){
-
+    onNewItemClick(item) {
+        this.props.navigation.navigate("NewDetailPage", {data: item})
     }
 
     onTabChange(index) {
@@ -163,11 +166,23 @@ export default class MainPage extends Component<Props> {
         this.refreshNewsData();
     }
 
+    _loadMore() {
+        this.curreentPage++;
+        let length = this.state.newsList;
+        this.httpUtil.getNewsList(this.httpUtil.getUrl(this.category.channelId, this.category.name, "", this.curreentPage, "", "", "", ""))
+            .then((result) => {
+                this.setState({
+                    newsList: this.state.newsList.concat(result),
+                })
+                this.refs._flatList.scrollToIndex({viewPosition: 0, index: length})
+            })
+
+    }
 
     refreshNewsData() {
-        this.httpUtil.getNewsList(this.httpUtil.getUrl(this.category.channelId, this.category.name, "", "", "", "", "", ""))
+        this.curreentPage = 1;
+        this.httpUtil.getNewsList(this.httpUtil.getUrl(this.category.channelId, this.category.name, "", this.curreentPage, "", "", "", ""))
             .then((result) => {
-
                 this.setState({
                     newsList: result,
                     isRefreshing: false
@@ -183,7 +198,7 @@ export default class MainPage extends Component<Props> {
                 color={"red"}
                 animating={true}
             />
-            <Text>正在加载更多</Text>
+            <Text style={{alignItems: "center"}}>正在加载更多</Text>
 
 
         </View>
@@ -229,4 +244,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10
     },
+    footerLayout: {
+        flexDirection: "column",
+
+    }
 });
